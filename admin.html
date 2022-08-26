@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin</title>
+</head>
+<body>
+<h1>Admin Interface</h1>
+<div>
+    <button type="button" onclick="listEvents()">List Events</button>
+</div>
+<hr/>
+<div>
+    <input type="text" id="eventID" placeholder="Event ID"/>
+    <button type="button" onclick="listAttendees()">List Attendees</button>
+    <button type="button" onclick="validateAttendees()">Validate Attendees</button>
+</div>
+<hr/>
+<div id="response">
+
+</div>
+<div id="output">
+
+</div>
+<script>
+    const api = "cLQVwVYupLbBYQzUcxnXqNifQWrMAJpNAwrpYypRZDbfXkwmmZjGxfQhZFnChjct";
+    function listEvents() {
+        const url = "https://localhost:8443/list";
+            const myHeaders = new Headers();
+        myHeaders.append('Authorization', api);
+        fetch(url, {
+            method: 'GET',
+            headers: myHeaders
+        }).
+        then(function(response) {
+            console.log(response.status);
+            document.getElementById("response").innerHTML = response.status
+            return response.json();
+        }).
+        then(data => {
+            console.log(data);
+            document.getElementById("output").innerHTML = JSON.stringify(data);
+        }).
+        catch(error => document.getElementById("output").innerHTML = error);
+
+    }
+
+    function listAttendees() {
+        const eventID = document.getElementById('eventID').value;
+        const url = "https://localhost:8443/admin/list/id=" + eventID;
+        const myHeaders = new Headers();0
+        myHeaders.append('Authorization', api);
+        fetch(url, {
+            method: 'GET',
+            headers: myHeaders,
+        }).
+        then(function(response) {
+            console.log(response.status);
+            document.getElementById("response").innerHTML = response.status
+            return response.json();
+        }).
+        then(data => {
+            document.getElementById("output").innerHTML = JSON.stringify(data);
+        }).
+        catch(error => document.getElementById("output").innerHTML = error);
+
+
+    }
+
+    function validateAttendees() {
+        const eventID = document.getElementById('eventID').value;
+        const url = "https://localhost:8443/admin/validate/id=" + eventID;
+        const myHeaders = new Headers();
+        myHeaders.append('Authorization', api);
+        fetch(url, {
+            method: 'DELETE',
+            headers: myHeaders,
+        }).
+        then(function(response) {
+            console.log(response.status);
+            document.getElementById("response").innerHTML = response.status
+            return response.json();
+        }).
+        then(data => {
+            document.getElementById("output").innerHTML = JSON.stringify(data);
+        }).
+        catch(error => document.getElementById("output").innerHTML = error);
+    }
+</script>
+</body>
+</html>
